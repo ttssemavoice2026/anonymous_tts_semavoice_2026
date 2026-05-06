@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="data/data.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <style>
+        .table_wrapper {
+            width: 100%;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            -webkit-overflow-scrolling: touch;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 1200px; /* Ensure table keeps its shape to trigger scroll */
+        }
+        td, th {
+            margin: 10px;
+            padding: 10px; 
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap; /* Prevent text wrapping inside cells */
+        }
+        .card2 {
+            margin: 2em auto;
+            padding: 2em;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+            max-width: 95vw; /* Constrain card width to viewport */
+            box-sizing: border-box;
+        }
+        .title_area {
+            display: flex;
+            flex-direction: column; /* Vertically stack the title and authors */
+            align-items: center;    /* Center items horizontally */
+            justify-content: center;
+            text-align: center;     /* Ensure multi-line text is centered */
+            width: 100%;            /* Ensure the container takes full width */
+            margin: 2em auto;       /* Add some vertical spacing */
+        }
+
+        .title_area h1 {
+            margin-bottom: 0.2em;   /* Adjust spacing between title and authors */
+        }
+
+    </style>
+</head>
+<body>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" 
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},  
+                {left: '$', right: '$', display: false}   
+            ],
+            throwOnError : false
+        });"></script>
+
+<div id="app">
+    <div class="title_area">
+        <h1>
+            SemaVoice: Semantic-Aware Continuous Autoregressive Speech Synthesis
+        </h1>
+        <div>
+          anonymous authors
+        </div>
+    </div>
+
+    <div class="card2">
+        <h2 style="text-align: left;">Abstract </h2> 
+        <p>
+            Continuous autoregressive speech synthesis has recently emerged as a promising direction for zero-shot
+            text-to-speech (TTS). However, existing methods still suffer from a fundamental mismatch between semantic-prosodic
+            modeling and reconstruction-driven continuous speech representations. This mismatch causes TTS models to focus
+            excessively
+            on low-level acoustic textures at the expense of high-level semantic coherence, further exacerbating error accumulation
+            in autoregressive generation. To address this challenge, we propose SemaVoice, a semantic-aware continuous autoregressive
+            framework for high-fidelity zero-shot TTS. SemaVoice introduces a Speech Foundation Model (SFM) guided alignment
+            mechanism that regularizes continuous speech representations to better capture both local semantic consistency and
+            global structural relationships. These semantic-aware representations condition a patch-wise diffusion head within
+            the autoregressive framework for high-quality speech synthesis. Experimental results on the Seed-TTS benchmark show
+            that SemaVoice achieves an English WER of 1.71% and remains highly competitive performance against state-of-the-art
+            open-source systems in both objective and subjective evaluations. The effectiveness of SFM-guided alignment is further
+            confirmed by the consistent and notable improvements under varying representation granularities with a fixed
+            information-rate constraint.
+        </p>
+
+        <h2 style="text-align: left;">Zero-shot TTS Audio Samples </h2> 
+
+        <div class="table_wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Text</th>
+                    <th>Prompt</th>
+                    <th>Ground Truth</th>
+                    <th>SemaVoice</th>
+                    <th>SemaVoice-Emilia(Ours)</th>
+                    <th>CosyVoice2</th>
+                    <th>IndexTTS2</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="i in items">
+                    <td>
+                        {{ i.text}}
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source :src="'data/'+i.prompt" type="audio/wav">
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source :src="'data/'+i.ground_truth" type="audio/wav">
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source :src="'data/'+i.semavoice" type="audio/wav">
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source :src="'data/'+i.semavoice_emilia_ours" type="audio/wav">
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source :src="'data/'+i.cosyvoice2" type="audio/wav">
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source :src="'data/'+i.indextts2" type="audio/wav">
+                        </audio>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            items: data_list,
+        },
+        methods: {
+            myToFixed(v) {
+                try {
+                    return v.toFixed(2)
+                } catch (e) {
+                    return v
+                }
+            }
+
+        }
+    })
+</script>
+
+</body>
+</html>
